@@ -32,7 +32,8 @@ fun App() {
             }
             AnimatedVisibility(showContent) {
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(painterResource("compose-multiplatform.xml"), null)
+                    Image(painterResource("img_camping.xml"), null)
+                    Image(painterResource("img_banner_large.png"), null)
                     Text("Compose: $greeting", style = MaterialTheme.typography.titleSmall)
                     Text("Compose: $greeting", fontSize = 24.sp, fontWeight = FontWeight.Bold)
                 }
