@@ -7,5 +7,5 @@ import register.feature.welcome.WelcomeScreen
 @Preview
 @Composable
 fun WelcomeScreenPreview() {
-    WelcomeScreen()
+
 }

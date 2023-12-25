@@ -50,4 +50,9 @@ val typography: Typography
             fontWeight = FontWeight.Light,
             fontSize = 12.sp
         ),
+        displayLarge = TextStyle(
+            fontFamily = robotoFontFamily,
+            fontWeight = FontWeight.Light,
+            fontSize = 20.sp
+        ),
     )
