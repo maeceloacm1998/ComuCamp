@@ -43,12 +43,12 @@ val typography: Typography
         bodyLarge = TextStyle(
             fontFamily = robotoFontFamily,
             fontWeight = FontWeight.Light,
-            fontSize = 14.sp
+            fontSize = 16.sp
         ),
         bodyMedium = TextStyle(
             fontFamily = robotoFontFamily,
             fontWeight = FontWeight.Light,
-            fontSize = 12.sp
+            fontSize = 14.sp
         ),
         displayLarge = TextStyle(
             fontFamily = robotoFontFamily,

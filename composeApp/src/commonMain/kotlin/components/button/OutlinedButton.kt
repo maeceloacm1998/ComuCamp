@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import theme.CustomDimensions
+import theme.GrayDark
 import theme.GrayLight
 import theme.Primary
 
@@ -23,6 +24,7 @@ fun OutlinedButtonCustom(
     titleColor: Color? = null,
     containerColor: Color? = null,
     loading: Boolean = false,
+    disabled: Boolean = false,
     modifier: Modifier = Modifier,
     onButtonListener: () -> Unit,
 ) {
@@ -37,9 +39,9 @@ fun OutlinedButtonCustom(
         ),
         border = BorderStroke(
             width = CustomDimensions.padding1,
-            color = Primary
+            color = if(disabled) GrayDark else Primary
         ),
-        enabled = !loading,
+        enabled = if (disabled) false else !loading,
         onClick = onButtonListener,
     ) {
         if (loading) {
@@ -52,7 +54,7 @@ fun OutlinedButtonCustom(
         } else {
             Text(
                 text = title,
-                color = Primary,
+                color = if(disabled) GrayDark else Primary,
                 style = MaterialTheme.typography.titleMedium
             )
         }

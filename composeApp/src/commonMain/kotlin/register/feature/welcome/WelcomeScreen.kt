@@ -4,23 +4,17 @@ package register.feature.welcome
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -28,11 +22,13 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import components.button.OutlinedButtonCustom
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import register.feature.registerusername.RegisterUserNameRoute
 import theme.Background
 import theme.CustomDimensions
 import theme.Primary
 import utils.Spacer
 
+@ExperimentalResourceApi
 internal class WelcomeScreen : Screen {
     @Composable
     override fun Content() {
@@ -43,10 +39,11 @@ internal class WelcomeScreen : Screen {
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .background(Background)
-                .padding(horizontal = CustomDimensions.padding20)
         ) {
 
             Column(
+                modifier = Modifier
+                    .padding(horizontal = CustomDimensions.padding20),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(CustomDimensions.padding50)
@@ -75,12 +72,11 @@ internal class WelcomeScreen : Screen {
             OutlinedButtonCustom(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
+                    .padding(horizontal = CustomDimensions.padding20)
                     .padding(bottom = CustomDimensions.padding40),
                 title = "Avançar", onButtonListener = {
-                    // TODO Colocar a próxima tela
-//                navigation.push()
+                    navigation.push(RegisterUserNameRoute())
                 })
         }
     }
-
 }
