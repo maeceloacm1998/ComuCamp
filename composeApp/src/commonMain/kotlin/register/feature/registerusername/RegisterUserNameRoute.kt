@@ -7,6 +7,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import register.feature.registerphoto.ui.RegisterPhotoRoute
 
 internal class RegisterUserNameRoute : Screen {
     @Composable
@@ -18,7 +19,7 @@ internal class RegisterUserNameRoute : Screen {
         RegisterUserNameRoute(
             uiState = uiState,
             onUserNameListener = { screenModel.onUpdateUserName(it) },
-            onNext = {},
+            onNext = { navigator.push(RegisterPhotoRoute(userName = it)) },
             onBack = { navigator.pop() }
         )
     }
