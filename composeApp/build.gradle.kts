@@ -49,6 +49,8 @@ kotlin {
             // Koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+
+            implementation("com.darkrockstudios:mpfilepicker:3.1.0")
         }
     }
 }

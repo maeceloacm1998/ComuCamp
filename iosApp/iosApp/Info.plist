@@ -44,9 +44,19 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
-    	<string>roboto_bold.ttf</string>
-    	<string>roboto_medium.ttf</string>
-    	<string>roboto_regular.ttf</string>
-    </array>
+		<string>roboto_bold.ttf</string>
+		<string>roboto_medium.ttf</string>
+		<string>roboto_regular.ttf</string>
+	</array>
+	<key>CFBundleDisplayName</key>
+	<string></string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) </string>
+	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+    <true/>
 </dict>
 </plist>
