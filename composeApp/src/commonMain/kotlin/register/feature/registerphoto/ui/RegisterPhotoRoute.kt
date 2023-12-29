@@ -4,14 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.darkrockstudios.libraries.mpfilepicker.FilePicker
+import dev.icerock.moko.permissions.compose.BindEffect
+import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
+import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import register.feature.registerphoto.ui.model.User
 
 internal data class RegisterPhotoRoute(
@@ -19,29 +19,37 @@ internal data class RegisterPhotoRoute(
 ) : Screen {
     @Composable
     override fun Content() {
-        var showFilePicker by remember { mutableStateOf(false) }
+        val permissionfactory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
+//        val mediafactory = rememberMediaPickerControllerFactory()
+
         val navigation = LocalNavigator.currentOrThrow
         val screenModel = getScreenModel<RegisterPhotoScreenModel>()
         val uiState by screenModel.uiState.collectAsState()
+        val showFilePicker = screenModel.showFilePicker.collectAsState()
 
         LaunchedEffect(Unit) {
-            screenModel.init(userName)
+            screenModel.init(
+                userName = userName,
+                permissionController = permissionfactory.createPermissionsController()
+            )
         }
 
         val fileType = listOf("jpg", "png")
-        FilePicker(show = showFilePicker, fileExtensions = fileType) { file ->
-            showFilePicker = false
+        FilePicker(show = showFilePicker.value, fileExtensions = fileType) { file ->
+            screenModel.closeButton()
             // do something with the file
         }
 
         RegisterPhotoRoute(
             uiState = uiState,
             onFinish = {},
-            onOpenPhoto = {showFilePicker = true},
-            onBack = {
-                navigation.pop()
-            }
+            onOpenPhoto = { screenModel.openButton() },
+            onBack = { navigation.pop() }
         )
+
+        if (!screenModel.isAndroid()) {
+            screenModel.permissionController?.let { BindEffect(it) }
+        }
     }
 }
 
