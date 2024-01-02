@@ -19,7 +19,8 @@ voyagerVersion = "1.0.0"
 koin = "3.4.3"
 koin-compose = "1.0.4"
 junit = "4.13.2"
-kotlin = "1.9.21"
+kotlin = "1.9.21-1.0.15"
+kotlinOld = "1.9.21"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -55,5 +56,5 @@ voyager = ["voyager-navigator", "voyager-screen-model", "voyager-tab", "voyager-
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
-kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlinOld" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin" }

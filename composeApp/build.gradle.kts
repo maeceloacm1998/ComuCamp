@@ -14,7 +14,7 @@ kotlin {
             }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -25,7 +25,7 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
@@ -57,7 +57,7 @@ kotlin {
 
             // compose multiplatform
             implementation("dev.icerock.moko:permissions-compose:0.17.0")
-
+            implementation("dev.icerock.moko:media-compose:0.11.0")
         }
     }
 }
