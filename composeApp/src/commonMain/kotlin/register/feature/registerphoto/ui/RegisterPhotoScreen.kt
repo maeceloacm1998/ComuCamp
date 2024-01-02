@@ -1,5 +1,6 @@
 package register.feature.registerphoto.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +22,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import components.button.OutlinedButtonCustom
 import register.feature.registerphoto.ui.model.User
 import theme.Background
@@ -83,6 +86,7 @@ fun RegisterPhotoScreen(
 
             PhotoContainer(
                 modifier = Modifier.align(Alignment.Center),
+                photoUrl = uiState.photoUrl,
                 onOpenPhoto = onOpenPhoto
             )
 
@@ -92,8 +96,8 @@ fun RegisterPhotoScreen(
                     .padding(
                         bottom = CustomDimensions.padding40,
                     ),
-                disabled = uiState.photoUrl.isEmpty(),
-                title = "Avançar",
+                disabled = uiState.photoUrl != null,
+                title = "Finalizar",
                 onButtonListener = {
                     onFinish(
                         User(
@@ -110,6 +114,7 @@ fun RegisterPhotoScreen(
 @Composable
 private fun PhotoContainer(
     modifier: Modifier = Modifier,
+    photoUrl: ImageBitmap?,
     onOpenPhoto: () -> Unit,
 ) {
     IconButton(
@@ -131,19 +136,28 @@ private fun PhotoContainer(
             ),
         onClick = onOpenPhoto
     ) {
-        Column {
-            Icon(
-                imageVector = Icons.Filled.PhotoCamera,
-                tint = Primary,
-                contentDescription = "Camera",
-                modifier = Modifier.size(CustomDimensions.padding80)
+        if (photoUrl != null) {
+            Image(
+                bitmap = photoUrl,
+                contentDescription = "imagem selecionada",
+                alignment = Alignment.Center,
+                contentScale = ContentScale.Crop
             )
+        } else {
+            Column {
+                Icon(
+                    imageVector = Icons.Filled.PhotoCamera,
+                    tint = Primary,
+                    contentDescription = "Camera",
+                    modifier = Modifier.size(CustomDimensions.padding80)
+                )
 
-            Text(
-                text = "Tirar foto",
-                style = MaterialTheme.typography.titleMedium,
-                color = Primary
-            )
+                Text(
+                    text = "Tirar foto",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Primary
+                )
+            }
         }
     }
 }

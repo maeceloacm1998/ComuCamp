@@ -9,6 +9,7 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.darkrockstudios.libraries.mpfilepicker.FilePicker
+import dev.icerock.moko.media.compose.rememberMediaPickerControllerFactory
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
@@ -19,10 +20,11 @@ internal data class RegisterPhotoRoute(
 ) : Screen {
     @Composable
     override fun Content() {
-        val permissionfactory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
-//        val mediafactory = rememberMediaPickerControllerFactory()
-
+        val fileType = listOf("jpg", "png")
         val navigation = LocalNavigator.currentOrThrow
+        val permissionfactory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
+        val mediafactory = rememberMediaPickerControllerFactory()
+
         val screenModel = getScreenModel<RegisterPhotoScreenModel>()
         val uiState by screenModel.uiState.collectAsState()
         val showFilePicker = screenModel.showFilePicker.collectAsState()
@@ -30,14 +32,16 @@ internal data class RegisterPhotoRoute(
         LaunchedEffect(Unit) {
             screenModel.init(
                 userName = userName,
-                permissionController = permissionfactory.createPermissionsController()
+                permissionController = permissionfactory.createPermissionsController(),
+                mediaPickerController = mediafactory.createMediaPickerController()
             )
         }
 
-        val fileType = listOf("jpg", "png")
         FilePicker(show = showFilePicker.value, fileExtensions = fileType) { file ->
             screenModel.closeButton()
-            // do something with the file
+            if (file != null) {
+                screenModel.pickerImageWithAndroid(file.path)
+            }
         }
 
         RegisterPhotoRoute(

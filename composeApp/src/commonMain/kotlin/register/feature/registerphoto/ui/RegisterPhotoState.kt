@@ -1,5 +1,6 @@
 package register.feature.registerphoto.ui
 
+import androidx.compose.ui.graphics.ImageBitmap
 import core.utils.ErrorMessage
 
 sealed interface RegisterPhotoUiState {
@@ -7,14 +8,14 @@ sealed interface RegisterPhotoUiState {
 
     data class Data(
         val userName: String,
-        val photoUrl: String,
+        val photoUrl: ImageBitmap?,
         override val errorMessages: ErrorMessage?,
     ) : RegisterPhotoUiState
 }
 
 data class RegisterPhotoState(
     val userName: String = "",
-    val photoUrl: String = "",
+    val photoUrl: ImageBitmap? = null ,
     val errorMessages: ErrorMessage? = null,
 ) {
     fun toUiState(): RegisterPhotoUiState =

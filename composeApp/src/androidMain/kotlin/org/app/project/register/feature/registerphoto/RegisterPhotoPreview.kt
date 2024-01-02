@@ -11,7 +11,7 @@ fun RegisterPhotoPreview() {
     RegisterPhotoRoute(
         uiState = RegisterPhotoUiState.Data(
             userName = "",
-            photoUrl = "",
+            photoUrl = null,
             errorMessages = null
         ),
         onFinish = {},
