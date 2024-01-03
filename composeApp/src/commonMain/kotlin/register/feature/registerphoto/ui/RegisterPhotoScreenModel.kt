@@ -2,7 +2,6 @@ package register.feature.registerphoto.ui
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import dev.icerock.moko.media.Bitmap
 import dev.icerock.moko.media.compose.toImageBitmap
 import dev.icerock.moko.media.picker.MediaPickerController
 import dev.icerock.moko.media.picker.MediaSource
@@ -20,7 +19,6 @@ import kotlinx.coroutines.launch
 
 class RegisterPhotoScreenModel : ScreenModel {
     private val viewModelState = MutableStateFlow(RegisterPhotoState())
-    private var mediaPickerController: MediaPickerController? = null
 
     val uiState = viewModelState
         .map(RegisterPhotoState::toUiState)
@@ -51,9 +49,5 @@ class RegisterPhotoScreenModel : ScreenModel {
                 // TODO SNACKBAR COM ACAO
             }
         }
-    }
-
-    fun updateImage(image: Bitmap) {
-        viewModelState.update { it.copy(photoUrl = image.toImageBitmap()) }
     }
 }
