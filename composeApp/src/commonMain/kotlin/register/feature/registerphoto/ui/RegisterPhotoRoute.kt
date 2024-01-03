@@ -1,15 +1,18 @@
 package register.feature.registerphoto.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.darkrockstudios.libraries.mpfilepicker.FilePicker
+import dev.icerock.moko.media.compose.BindMediaPickerEffect
 import dev.icerock.moko.media.compose.rememberMediaPickerControllerFactory
+import dev.icerock.moko.permissions.PermissionsController
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
@@ -20,40 +23,40 @@ internal data class RegisterPhotoRoute(
 ) : Screen {
     @Composable
     override fun Content() {
-        val fileType = listOf("jpg", "png")
         val navigation = LocalNavigator.currentOrThrow
-        val permissionfactory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
-        val mediafactory = rememberMediaPickerControllerFactory()
+        val coroutineScope = rememberCoroutineScope()
+
+        val mediaFactory = rememberMediaPickerControllerFactory()
+        val mediaPicker = remember(mediaFactory) { mediaFactory.createMediaPickerController() }
+
+        val permissionFactory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
+        val permissionController: PermissionsController = remember(permissionFactory) {
+            permissionFactory.createPermissionsController()
+        }
 
         val screenModel = getScreenModel<RegisterPhotoScreenModel>()
         val uiState by screenModel.uiState.collectAsState()
-        val showFilePicker = screenModel.showFilePicker.collectAsState()
 
-        LaunchedEffect(Unit) {
-            screenModel.init(
-                userName = userName,
-                permissionController = permissionfactory.createPermissionsController(),
-                mediaPickerController = mediafactory.createMediaPickerController()
-            )
-        }
+        BindEffect(permissionController)
+        BindMediaPickerEffect(mediaPicker)
 
-        FilePicker(show = showFilePicker.value, fileExtensions = fileType) { file ->
-            screenModel.closeButton()
-            if (file != null) {
-                screenModel.pickerImageWithAndroid(file.path)
-            }
+        DisposableEffect(Unit) {
+            screenModel.init(userName = userName)
+            onDispose {}
         }
 
         RegisterPhotoRoute(
             uiState = uiState,
             onFinish = {},
-            onOpenPhoto = { screenModel.openButton() },
+            onOpenPhoto = {
+                screenModel.openPhoto(
+                    coroutineScope = coroutineScope,
+                    mediaPickerController = mediaPicker,
+                    permissionsController = permissionController
+                )
+            },
             onBack = { navigation.pop() }
         )
-
-        if (!screenModel.isAndroid()) {
-            screenModel.permissionController?.let { BindEffect(it) }
-        }
     }
 }
 

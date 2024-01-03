@@ -96,7 +96,7 @@ fun RegisterPhotoScreen(
                     .padding(
                         bottom = CustomDimensions.padding40,
                     ),
-                disabled = uiState.photoUrl != null,
+                disabled = uiState.photoUrl == null,
                 title = "Finalizar",
                 onButtonListener = {
                     onFinish(
