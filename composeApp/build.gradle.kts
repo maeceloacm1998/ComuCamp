@@ -52,12 +52,12 @@ kotlin {
 
             // Media Picker
             implementation(libs.mpfilepicker)
-
-            implementation("dev.icerock.moko:permissions:0.17.0")
-
+            implementation(libs.permissions)
             // compose multiplatform
-            implementation("dev.icerock.moko:permissions-compose:0.17.0")
-            implementation("dev.icerock.moko:media-compose:0.11.0")
+            implementation(libs.permissions.compose)
+            implementation(libs.media.compose)
+
+            implementation("dev.gitlive:firebase-storage:1.10.4")
         }
     }
 }
