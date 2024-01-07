@@ -46,6 +46,7 @@ fun GameRoutePreview() {
     GameScreen(
         uiState = GameScreenModelUiState.GameState(
             options = options.toMutableList(),
+            completeItems = mutableListOf(),
             errorMessages = null,
             finishGame = false,
             tryCount = 2,

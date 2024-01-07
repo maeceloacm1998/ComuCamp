@@ -1,5 +1,6 @@
 package comunexo.feature.game
 
+import comunexo.feature.game.model.CompleteItem
 import comunexo.feature.game.model.OptionItem
 import core.utils.ErrorMessage
 
@@ -16,6 +17,7 @@ sealed interface GameScreenModelUiState {
 
     data class GameState(
         val options: MutableList<OptionItem>,
+        val completeItems: List<CompleteItem>,
         val tryCount: Int,
         override val errorMessages: ErrorMessage?,
         override val onLoading: Boolean,
@@ -25,6 +27,7 @@ sealed interface GameScreenModelUiState {
 
 data class GameScreenModelState(
     val options: MutableList<OptionItem> = mutableListOf(),
+    val completeItems: List<CompleteItem> = mutableListOf(),
     val tryCount: Int = 0,
     val finishGame: Boolean = false,
     val onLoading: Boolean = false,
@@ -40,6 +43,7 @@ data class GameScreenModelState(
         } else {
             GameScreenModelUiState.GameState(
                 options = options,
+                completeItems = completeItems,
                 tryCount = tryCount,
                 errorMessages = errorMessages,
                 finishGame = finishGame,

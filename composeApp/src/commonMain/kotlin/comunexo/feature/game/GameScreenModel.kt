@@ -2,6 +2,7 @@ package comunexo.feature.game
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import comunexo.feature.game.model.CompleteItem
 import comunexo.feature.game.model.OptionItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,9 +14,11 @@ import kotlinx.coroutines.launch
 
 class GameScreenModel : ScreenModel {
     private val viewModelState = MutableStateFlow(GameScreenModelState())
+
     private var options: MutableList<OptionItem> = mutableListOf()
     private var optionsSelected: MutableList<OptionItem> = mutableListOf()
 
+    private var completeItemsList: MutableList<CompleteItem> = mutableListOf()
 
     val uiState = viewModelState
         .map(GameScreenModelState::toUiState)
@@ -76,7 +79,21 @@ class GameScreenModel : ScreenModel {
         updateCheckedOptionUi(optionSelected)
         if (optionsSelected.size == 4) {
             if (checkOptionsHaveSameCategory()) {
+                val completeItem = CompleteItem(
+                    title = optionSelected.category,
+                    options = optionsSelected.map { it.title }.toString()
+                )
+                completeItemsList.add(completeItem)
 
+                optionsSelected.forEach { item ->
+                    options.remove(item)
+                }
+
+                onClearOptionsSelected()
+                onRefreshGame(
+                    options = options,
+                    completeItems = completeItemsList
+                )
             } else {
                 handleOptionsNotHaveSameCategory()
             }
@@ -97,7 +114,10 @@ class GameScreenModel : ScreenModel {
                 originalItem.isChecked = !originalItem.isChecked
             }
         }
-        onRefreshGame(options)
+        onRefreshGame(
+            options = options,
+            completeItems = completeItemsList
+        )
     }
 
     private fun handleOptionsNotHaveSameCategory() {
@@ -123,7 +143,10 @@ class GameScreenModel : ScreenModel {
                 }
             }
         }
-        onRefreshGame(optionsWithError)
+        onRefreshGame(
+            options = optionsWithError,
+            completeItems = completeItemsList
+        )
     }
 
     private fun onClearOptions() {
@@ -137,7 +160,10 @@ class GameScreenModel : ScreenModel {
             }
         }
         onAddTryCount()
-        onRefreshGame(clearOptions)
+        onRefreshGame(
+            options = clearOptions,
+            completeItems = completeItemsList
+        )
     }
 
     private fun onClearOptionsSelected() {
@@ -150,6 +176,7 @@ class GameScreenModel : ScreenModel {
 
     private fun onRefreshGame(
         options: MutableList<OptionItem>,
+        completeItems: MutableList<CompleteItem>,
         delay: Long = 2L
     ) {
         screenModelScope.launch {
@@ -157,7 +184,13 @@ class GameScreenModel : ScreenModel {
                 it.copy(onLoading = true)
             }
             delay(delay)
-            viewModelState.update { it.copy(onLoading = false, options = options) }
+            viewModelState.update {
+                it.copy(
+                    onLoading = false,
+                    options = options,
+                    completeItems = completeItems
+                )
+            }
         }
     }
 }
