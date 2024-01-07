@@ -15,6 +15,7 @@ object CustomDimensions {
     val padding60 = 60.dp
     val padding50 = 50.dp
     val padding40 = 40.dp
+    val padding35 = 35.dp
     val padding30 = 30.dp
     val padding24 = 24.dp
     val padding20 = 20.dp
