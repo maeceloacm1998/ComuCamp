@@ -16,6 +16,7 @@ sealed interface GameScreenModelUiState {
 
     data class GameState(
         val options: MutableList<OptionItem>,
+        val tryCount: Int,
         override val errorMessages: ErrorMessage?,
         override val onLoading: Boolean,
         override val finishGame: Boolean,
@@ -23,9 +24,10 @@ sealed interface GameScreenModelUiState {
 }
 
 data class GameScreenModelState(
+    val options: MutableList<OptionItem> = mutableListOf(),
+    val tryCount: Int = 0,
     val finishGame: Boolean = false,
     val onLoading: Boolean = false,
-    val options: MutableList<OptionItem> = mutableListOf(),
     val errorMessages: ErrorMessage? = null,
 ) {
     fun toUiState(): GameScreenModelUiState =
@@ -38,6 +40,7 @@ data class GameScreenModelState(
         } else {
             GameScreenModelUiState.GameState(
                 options = options,
+                tryCount = tryCount,
                 errorMessages = errorMessages,
                 finishGame = finishGame,
                 onLoading = onLoading

@@ -42,7 +42,10 @@ import kotlinx.coroutines.launch
 import theme.Background
 import theme.ComunexoPrimary
 import theme.ComunexoSecondary
+import theme.CustomDimensions
 import theme.Error
+import theme.SoftBlack
+import utils.Spacer
 
 @Composable
 fun GameScreen(
@@ -66,8 +69,16 @@ fun GameScreen(
                     .padding(contentPadding)
                     .fillMaxSize()
                     .background(Background),
-                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Text(
+                    modifier = Modifier.padding(horizontal = CustomDimensions.padding16),
+                    text = "${uiState.tryCount} tentativas",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = SoftBlack
+                )
+
+                Spacer(CustomDimensions.padding5)
+
                 LazyVerticalStaggeredGrid(
                     columns = StaggeredGridCells.Fixed(4),
                     contentPadding = PaddingValues(12.dp),
@@ -101,7 +112,7 @@ fun BoxOption(
     }
 
     LaunchedEffect(item.isError) {
-        if(item.isError) {
+        if (item.isError) {
             coroutineScope.launch {
                 xOffset.animateTo(
                     targetValue = 10f,

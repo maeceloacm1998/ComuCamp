@@ -48,6 +48,7 @@ fun GameRoutePreview() {
             options = options.toMutableList(),
             errorMessages = null,
             finishGame = false,
+            tryCount = 2,
             onLoading = false
         )
     ) {}

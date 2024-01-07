@@ -84,7 +84,7 @@ class GameScreenModel : ScreenModel {
     }
 
     private fun updateOptionSelectedList(option: OptionItem) {
-        if(optionsSelected.contains(option)) {
+        if (optionsSelected.contains(option)) {
             optionsSelected.remove(option)
         } else {
             optionsSelected.add(option)
@@ -136,11 +136,16 @@ class GameScreenModel : ScreenModel {
                 }
             }
         }
+        onAddTryCount()
         onRefreshGame(clearOptions)
     }
 
     private fun onClearOptionsSelected() {
         optionsSelected = mutableListOf()
+    }
+
+    private fun onAddTryCount() {
+        viewModelState.update { it.copy(tryCount = it.tryCount + 1) }
     }
 
     private fun onRefreshGame(
