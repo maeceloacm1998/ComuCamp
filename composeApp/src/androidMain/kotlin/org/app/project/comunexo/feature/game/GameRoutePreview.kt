@@ -12,35 +12,43 @@ fun GameRoutePreview() {
     val options = listOf(
         OptionItem(
             title = "Item 1",
-            category = "Jesus"
+            category = "Jesus",
+            color = "#28A745"
         ),
         OptionItem(
-            title = "Item 2",
-            category = "Jesus"
+            title = "Hipotese",
+            category = "Jesus",
+            color = "#28A745"
         ),
         OptionItem(
-            title = "Item 3",
-            category = "Jesus"
+            title = "Hospedagem",
+            category = "Jesus",
+            color = "#28A745"
         ),
         OptionItem(
             title = "Item 4",
-            category = "Jesus"
+            category = "Jesus",
+            color = "#28A745"
         ),
         OptionItem(
             title = "Item 5",
-            category = "Cloro"
+            category = "Cloro",
+            color = "#dc3545"
         ),
         OptionItem(
-            title = "Item 6",
-            category = "Cloro"
+            title = "Passaporte",
+            category = "Cloro",
+            color = "#dc3545"
         ),
         OptionItem(
             title = "Item 7",
-            category = "Cloro"
+            category = "Cloro",
+            color = "#dc3545"
         ),
         OptionItem(
             title = "Item 8",
-            category = "Cloro"
+            category = "Cloro",
+            color = "#dc3545"
         ),
     )
     GameScreen(

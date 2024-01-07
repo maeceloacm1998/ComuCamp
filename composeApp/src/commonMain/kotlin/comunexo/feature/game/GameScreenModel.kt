@@ -36,35 +36,43 @@ class GameScreenModel : ScreenModel {
         val optionsFake = listOf(
             OptionItem(
                 title = "Item 1",
-                category = "Jesus"
+                category = "Jesus",
+                color = "#28A745"
             ),
             OptionItem(
                 title = "Hipotese",
-                category = "Jesus"
+                category = "Jesus",
+                color = "#28A745"
             ),
             OptionItem(
                 title = "Hospedagem",
-                category = "Jesus"
+                category = "Jesus",
+                color = "#28A745"
             ),
             OptionItem(
                 title = "Item 4",
-                category = "Jesus"
+                category = "Jesus",
+                color = "#28A745"
             ),
             OptionItem(
                 title = "Item 5",
-                category = "Cloro"
+                category = "Cloro",
+                color = "#dc3545"
             ),
             OptionItem(
                 title = "Passaporte",
-                category = "Cloro"
+                category = "Cloro",
+                color = "#dc3545"
             ),
             OptionItem(
                 title = "Item 7",
-                category = "Cloro"
+                category = "Cloro",
+                color = "#dc3545"
             ),
             OptionItem(
                 title = "Item 8",
-                category = "Cloro"
+                category = "Cloro",
+                color = "#dc3545"
             ),
         )
 
@@ -81,7 +89,8 @@ class GameScreenModel : ScreenModel {
             if (checkOptionsHaveSameCategory()) {
                 val completeItem = CompleteItem(
                     title = optionSelected.category,
-                    options = optionsSelected.map { it.title }.toString()
+                    options = optionsSelected.map { it.title }.toString(),
+                    color = optionSelected.color
                 )
                 completeItemsList.add(completeItem)
 

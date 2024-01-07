@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -40,6 +42,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import comunexo.components.toolbar.ToolbarComunexo
+import comunexo.feature.game.model.CompleteItem
 import comunexo.feature.game.model.OptionItem
 import theme.Background
 import theme.ComunexoPrimary
@@ -48,11 +51,11 @@ import theme.CustomDimensions
 import theme.Error
 import theme.SoftBlack
 import utils.Spacer
+import utils.toColor
 
 @Composable
 fun GameScreen(
     uiState: GameScreenModelUiState.GameState,
-    listState: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
     onCheckedItem: (option: OptionItem) -> Unit
 ) {
     Scaffold(
@@ -79,38 +82,88 @@ fun GameScreen(
 
             Spacer(CustomDimensions.padding5)
 
-            AnimatedVisibility(uiState.completeItems.isNotEmpty()) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentPadding = PaddingValues(16.dp)
-                ) {
-                    items(uiState.completeItems) { item ->
-                        Card {
-                            Text(item.title)
-                            Text(item.options)
-                        }
-                    }
-                }
-            }
+            GameListComplete(
+                uiState = uiState
+            )
 
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(4),
-                contentPadding = PaddingValues(12.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalItemSpacing = 20.dp,
-                state = listState
-            ) {
-                items(uiState.options, key = { item -> item.title }) { item ->
-                    BoxOption(
-                        item = item,
-                        onCheckedItem = onCheckedItem
-                    )
-                }
+            GameGrid(
+                uiState = uiState,
+                onCheckedItem = onCheckedItem
+            )
+        }
+    }
+}
+
+@Composable
+fun GameListComplete(
+    uiState: GameScreenModelUiState.GameState,
+    listState: LazyListState = rememberLazyListState(),
+) {
+    AnimatedVisibility(uiState.completeItems.isNotEmpty()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(CustomDimensions.padding16),
+            verticalArrangement = Arrangement.spacedBy(CustomDimensions.padding16),
+            state = listState
+        ) {
+            items(uiState.completeItems) { item ->
+                BoxCompleteItem(item)
             }
         }
     }
 }
 
+@Composable
+fun BoxCompleteItem(
+    item: CompleteItem
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = item.color.toColor()),
+    ) {
+        Box(
+            modifier = Modifier.fillMaxWidth()
+                .padding(CustomDimensions.padding20),
+            contentAlignment = Alignment.Center
+        ) {
+            Column {
+                Text(
+                    item.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.White
+                )
+                Text(
+                    item.options,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color.White
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun GameGrid(
+    uiState: GameScreenModelUiState.GameState,
+    listState: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
+    onCheckedItem: (option: OptionItem) -> Unit
+) {
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(4),
+        contentPadding = PaddingValues(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalItemSpacing = 20.dp,
+        state = listState
+    ) {
+        items(uiState.options, key = { item -> item.title }) { item ->
+            BoxOption(
+                item = item,
+                onCheckedItem = onCheckedItem
+            )
+        }
+    }
+}
 
 @Composable
 fun BoxOption(
