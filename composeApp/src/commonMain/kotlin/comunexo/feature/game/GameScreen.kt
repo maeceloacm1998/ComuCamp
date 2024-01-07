@@ -14,11 +14,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
@@ -26,10 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import comunexo.components.toolbar.ToolbarComunexo
 import comunexo.feature.game.model.OptionItem
-import kotlinx.coroutines.launch
 import theme.Background
 import theme.ComunexoPrimary
 import theme.ComunexoSecondary
@@ -50,47 +47,45 @@ import utils.Spacer
 @Composable
 fun GameScreen(
     uiState: GameScreenModelUiState.GameState,
+    listState: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
     onCheckedItem: (option: OptionItem) -> Unit
 ) {
-    if (uiState.onLoading) {
-        CircularProgressIndicator()
-    } else {
-        Scaffold(
-            topBar = {
-                ToolbarComunexo(
-                    title = "Comunexo",
-                    onFaqListener = {},
-                    onNavigationListener = {}
-                )
-            }
-        ) { contentPadding ->
-            Column(
-                modifier = Modifier
-                    .padding(contentPadding)
-                    .fillMaxSize()
-                    .background(Background),
+    Scaffold(
+        topBar = {
+            ToolbarComunexo(
+                title = "Comunexo",
+                onFaqListener = {},
+                onNavigationListener = {}
+            )
+        }
+    ) { contentPadding ->
+        Column(
+            modifier = Modifier
+                .padding(contentPadding)
+                .fillMaxSize()
+                .background(Background),
+        ) {
+            Text(
+                modifier = Modifier.padding(horizontal = CustomDimensions.padding16),
+                text = "${uiState.tryCount} tentativas",
+                style = MaterialTheme.typography.titleMedium,
+                color = SoftBlack
+            )
+
+            Spacer(CustomDimensions.padding5)
+
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Fixed(4),
+                contentPadding = PaddingValues(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalItemSpacing = 20.dp,
+                state = listState
             ) {
-                Text(
-                    modifier = Modifier.padding(horizontal = CustomDimensions.padding16),
-                    text = "${uiState.tryCount} tentativas",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = SoftBlack
-                )
-
-                Spacer(CustomDimensions.padding5)
-
-                LazyVerticalStaggeredGrid(
-                    columns = StaggeredGridCells.Fixed(4),
-                    contentPadding = PaddingValues(12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalItemSpacing = 20.dp
-                ) {
-                    items(uiState.options, key = { item -> item.title }) { item ->
-                        BoxOption(
-                            item = item,
-                            onCheckedItem = onCheckedItem
-                        )
-                    }
+                items(uiState.options, key = { item -> item.title }) { item ->
+                    BoxOption(
+                        item = item,
+                        onCheckedItem = onCheckedItem
+                    )
                 }
             }
         }
@@ -103,9 +98,7 @@ fun BoxOption(
     item: OptionItem,
     onCheckedItem: (option: OptionItem) -> Unit
 ) {
-    var clicked by remember { mutableStateOf(false) }
     val cardContentColor by animateColorAsState(targetValue = if (item.isChecked) ComunexoSecondary else ComunexoPrimary)
-    val coroutineScope = rememberCoroutineScope()
 
     val xOffset = remember {
         Animatable(0f)
@@ -113,31 +106,29 @@ fun BoxOption(
 
     LaunchedEffect(item.isError) {
         if (item.isError) {
-            coroutineScope.launch {
-                xOffset.animateTo(
-                    targetValue = 10f,
-                    animationSpec = tween(
-                        durationMillis = 150,
-                        easing = LinearEasing
-                    )
+            xOffset.animateTo(
+                targetValue = 10f,
+                animationSpec = tween(
+                    durationMillis = 150,
+                    easing = LinearEasing
                 )
+            )
 
-                xOffset.animateTo(
-                    targetValue = -10f,
-                    animationSpec = tween(
-                        durationMillis = 150,
-                        easing = LinearEasing
-                    )
+            xOffset.animateTo(
+                targetValue = -10f,
+                animationSpec = tween(
+                    durationMillis = 150,
+                    easing = LinearEasing
                 )
+            )
 
-                xOffset.animateTo(
-                    targetValue = 0f,
-                    animationSpec = tween(
-                        durationMillis = 150,
-                        easing = LinearEasing
-                    )
+            xOffset.animateTo(
+                targetValue = 0f,
+                animationSpec = tween(
+                    durationMillis = 150,
+                    easing = LinearEasing
                 )
-            }
+            )
         }
     }
 
@@ -149,7 +140,6 @@ fun BoxOption(
             }
             .clickable {
                 onCheckedItem(item)
-                clicked = !clicked
             },
         colors = CardDefaults.cardColors(
             containerColor = cardContentColor
