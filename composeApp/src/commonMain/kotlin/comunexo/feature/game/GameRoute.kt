@@ -1,19 +1,27 @@
 package comunexo.feature.game
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import comunexo.feature.game.GameScreenType.Game
 import comunexo.feature.game.GameScreenType.GameFinish
+import comunexo.feature.game.model.GameOption
 import comunexo.feature.game.model.OptionItem
 
-class GameRoute : Screen {
+class GameRoute(
+    private val gameOption: GameOption
+) : Screen {
     @Composable
     override fun Content() {
         val screenModel = getScreenModel<GameScreenModel>()
         val uiState by screenModel.uiState.collectAsState()
+
+        LaunchedEffect(Unit) {
+            screenModel.initGame(gameOption)
+        }
 
         GameRoute(
             uiState = uiState,

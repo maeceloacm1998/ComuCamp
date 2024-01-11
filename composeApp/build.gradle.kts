@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+    id("com.google.gms.google-services")
+    id("kotlinx-serialization")
 }
 
 kotlin {
@@ -33,6 +35,9 @@ kotlin {
 
             // Koin
             implementation(libs.koin.android)
+
+            implementation(libs.firebase.bom)
+            implementation(libs.firebase.common.ktx)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -57,7 +62,9 @@ kotlin {
             implementation(libs.permissions.compose)
             implementation(libs.media.compose)
 
-            implementation("dev.gitlive:firebase-storage:1.10.4")
+            implementation(libs.firebase.firestore)
+            implementation(libs.firebase.common)
+            implementation(libs.kotlinx.serialization.json)
         }
     }
 }
@@ -100,5 +107,8 @@ android {
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
     }
+}
+dependencies {
+    implementation(libs.firebase.firestore.ktx)
 }
 

@@ -6,6 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
 import app.App
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.initialize
+import dev.gitlive.firebase.firestore.FirebaseFirestore
 import org.app.project.utils.imageloader.ImageLoaderModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -14,13 +17,13 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         startKoin {
             androidContext(this@MainActivity)
             modules(listOf(
                 ImageLoaderModule.modules
             ))
         }
-
         setContent {
             App()
         }

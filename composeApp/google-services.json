@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "583529809039",
+    "project_id": "comucamp-a676f",
+    "storage_bucket": "comucamp-a676f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:583529809039:android:fe5cd7e8bfaa48a219dcfa",
+        "android_client_info": {
+          "package_name": "org.app.project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFAy3yK9cDg_4KStDXb7aCbyCvGILrDQ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:583529809039:android:a3f8731bb32384ef19dcfa",
+        "android_client_info": {
+          "package_name": "org.app.project.ComuCamp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFAy3yK9cDg_4KStDXb7aCbyCvGILrDQ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

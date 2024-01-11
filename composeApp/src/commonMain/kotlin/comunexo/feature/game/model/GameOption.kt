@@ -3,8 +3,8 @@ package comunexo.feature.game.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CompleteItem(
+data class GameOption(
+    val id: String = "",
     val title: String = "",
-    val options: String = "",
-    val color: String = ""
+    val optionItem: List<OptionItem> = mutableListOf()
 )

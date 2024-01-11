@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyASK0h_ZKtwRSjfruWGXPoP7DqwwNJbRH0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>583529809039</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.app.project.ComuCamp</string>
+	<key>PROJECT_ID</key>
+	<string>comucamp-a676f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>comucamp-a676f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:583529809039:ios:f6ff778f75a3969819dcfa</string>
+</dict>
+</plist>

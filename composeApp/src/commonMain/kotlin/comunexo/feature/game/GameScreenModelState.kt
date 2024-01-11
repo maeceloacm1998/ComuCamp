@@ -16,7 +16,7 @@ sealed interface GameScreenModelUiState {
     ) : GameScreenModelUiState
 
     data class GameState(
-        val options: MutableList<OptionItem>,
+        val options: List<OptionItem>,
         val completeItems: List<CompleteItem>,
         val tryCount: Int,
         override val errorMessages: ErrorMessage?,
@@ -26,7 +26,7 @@ sealed interface GameScreenModelUiState {
 }
 
 data class GameScreenModelState(
-    val options: MutableList<OptionItem> = mutableListOf(),
+    val options: List<OptionItem> = mutableListOf(),
     val completeItems: List<CompleteItem> = mutableListOf(),
     val tryCount: Int = 0,
     val finishGame: Boolean = false,

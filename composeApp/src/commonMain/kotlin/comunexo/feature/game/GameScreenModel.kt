@@ -3,7 +3,11 @@ package comunexo.feature.game
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import comunexo.feature.game.model.CompleteItem
+import comunexo.feature.game.model.Game
+import comunexo.feature.game.model.GameOption
 import comunexo.feature.game.model.OptionItem
+import core.firebase.FirebaseClient
+import core.firebase.FirebaseConstants
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -12,13 +16,16 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class GameScreenModel : ScreenModel {
+class GameScreenModel(
+    private val client: FirebaseClient
+) : ScreenModel {
     private val viewModelState = MutableStateFlow(GameScreenModelState())
 
+    private var id: String = ""
     private var options: MutableList<OptionItem> = mutableListOf()
     private var optionsSelected: MutableList<OptionItem> = mutableListOf()
-
     private var completeItemsList: MutableList<CompleteItem> = mutableListOf()
+    private var tryCount: Int = 0
 
     val uiState = viewModelState
         .map(GameScreenModelState::toUiState)
@@ -28,85 +35,77 @@ class GameScreenModel : ScreenModel {
             viewModelState.value.toUiState()
         )
 
-    init {
-        fetchOptions()
-    }
-
-    fun fetchOptions() {
-        val optionsFake = listOf(
-            OptionItem(
-                title = "Item 1",
-                category = "Jesus",
-                color = "#28A745"
-            ),
-            OptionItem(
-                title = "Hipotese",
-                category = "Jesus",
-                color = "#28A745"
-            ),
-            OptionItem(
-                title = "Hospedagem",
-                category = "Jesus",
-                color = "#28A745"
-            ),
-            OptionItem(
-                title = "Item 4",
-                category = "Jesus",
-                color = "#28A745"
-            ),
-            OptionItem(
-                title = "Item 5",
-                category = "Cloro",
-                color = "#dc3545"
-            ),
-            OptionItem(
-                title = "Passaporte",
-                category = "Cloro",
-                color = "#dc3545"
-            ),
-            OptionItem(
-                title = "Item 7",
-                category = "Cloro",
-                color = "#dc3545"
-            ),
-            OptionItem(
-                title = "Item 8",
-                category = "Cloro",
-                color = "#dc3545"
-            ),
-        )
-
-        options = optionsFake.toMutableList()
-        viewModelState.update {
-            it.copy(options = optionsFake.toMutableList())
+    fun initGame(gameOption: GameOption) {
+        screenModelScope.launch {
+            client.getSpecificDocument(
+                collectionPath = FirebaseConstants.Collections.CONEXALVO_GAME,
+                documentPath = gameOption.id
+            ).onSuccess {
+                try {
+                    val game = it.data<Game>()
+                    handleGame(game)
+                } catch (_: IllegalArgumentException) {
+                    createGame(gameOption)
+                }
+            }.onFailure {
+                val y = ""
+            }
         }
     }
+
+    private suspend fun createGame(gameOption: GameOption) {
+        val game = Game(
+            id = gameOption.id,
+            tryCount = 0,
+            optionItems = gameOption.optionItem,
+            completeItems = mutableListOf()
+        )
+        client.setSpecificDocument(FirebaseConstants.Collections.CONEXALVO_GAME, game.id, game)
+        handleGame(game)
+    }
+
+    private fun handleGame(game: Game) {
+        completeItemsList = game.completeItems.toMutableList()
+        options = game.optionItems.toMutableList()
+        id = game.id
+
+        onRefreshGame(game)
+        onClearOptionsSelected()
+    }
+
 
     fun onCheckOption(optionSelected: OptionItem) {
         updateOptionSelectedList(optionSelected)
         updateCheckedOptionUi(optionSelected)
         if (optionsSelected.size == 4) {
             if (checkOptionsHaveSameCategory()) {
-                val completeItem = CompleteItem(
-                    title = optionSelected.category,
-                    options = optionsSelected.map { it.title }.toString(),
-                    color = optionSelected.color
-                )
-                completeItemsList.add(completeItem)
-
-                optionsSelected.forEach { item ->
-                    options.remove(item)
-                }
-
-                onClearOptionsSelected()
-                onRefreshGame(
-                    options = options,
-                    completeItems = completeItemsList
-                )
+                onCompleteItem(optionSelected)
             } else {
                 handleOptionsNotHaveSameCategory()
             }
         }
+    }
+
+    private fun onCompleteItem(optionSelected: OptionItem) {
+        val completeItem = CompleteItem(
+            title = optionSelected.category,
+            options = optionsSelected.map { it.title }.toString(),
+            color = optionSelected.color
+        )
+        completeItemsList.add(completeItem)
+        optionsSelected.forEach { item ->
+            options.remove(item)
+        }
+
+        val game = Game(
+            tryCount = tryCount,
+            optionItems = options,
+            completeItems = completeItemsList
+        )
+
+        onClearOptionsSelected()
+        onRefreshGame(game)
+        onUpdateGame(game)
     }
 
     private fun updateOptionSelectedList(option: OptionItem) {
@@ -124,8 +123,11 @@ class GameScreenModel : ScreenModel {
             }
         }
         onRefreshGame(
-            options = options,
-            completeItems = completeItemsList
+            Game(
+                tryCount = tryCount,
+                optionItems = options,
+                completeItems = completeItemsList
+            )
         )
     }
 
@@ -134,6 +136,7 @@ class GameScreenModel : ScreenModel {
             onErrorOptions()
             delay(800L)
             onClearOptions()
+            onAddTryCount()
             onClearOptionsSelected()
         }
     }
@@ -153,8 +156,11 @@ class GameScreenModel : ScreenModel {
             }
         }
         onRefreshGame(
-            options = optionsWithError,
-            completeItems = completeItemsList
+            Game(
+                tryCount = tryCount,
+                optionItems = optionsWithError,
+                completeItems = completeItemsList
+            )
         )
     }
 
@@ -168,10 +174,12 @@ class GameScreenModel : ScreenModel {
                 }
             }
         }
-        onAddTryCount()
         onRefreshGame(
-            options = clearOptions,
-            completeItems = completeItemsList
+            Game(
+                tryCount = tryCount,
+                optionItems = clearOptions,
+                completeItems = completeItemsList
+            )
         )
     }
 
@@ -180,12 +188,18 @@ class GameScreenModel : ScreenModel {
     }
 
     private fun onAddTryCount() {
-        viewModelState.update { it.copy(tryCount = it.tryCount + 1) }
+        val game = Game(
+            tryCount = tryCount + 1,
+            optionItems = options,
+            completeItems = completeItemsList
+        )
+        tryCount = game.tryCount
+        onUpdateGame(game)
+        onRefreshGame(game)
     }
 
     private fun onRefreshGame(
-        options: MutableList<OptionItem>,
-        completeItems: MutableList<CompleteItem>,
+        game: Game,
         delay: Long = 2L
     ) {
         screenModelScope.launch {
@@ -196,10 +210,21 @@ class GameScreenModel : ScreenModel {
             viewModelState.update {
                 it.copy(
                     onLoading = false,
-                    options = options,
-                    completeItems = completeItems
+                    tryCount = game.tryCount,
+                    options = game.optionItems,
+                    completeItems = game.completeItems
                 )
             }
+        }
+    }
+
+    private fun onUpdateGame(game: Game) {
+        screenModelScope.launch {
+            client.setSpecificDocument(
+                collectionPath = FirebaseConstants.Collections.CONEXALVO_GAME,
+                documentPath = id,
+                data = game
+            )
         }
     }
 }

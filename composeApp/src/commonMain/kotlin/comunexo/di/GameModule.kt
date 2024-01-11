@@ -5,6 +5,6 @@ import org.koin.dsl.module
 
 object GameModule {
     val modules = module {
-        factory { GameScreenModel() }
+        factory { GameScreenModel(client = get()) }
     }
 }

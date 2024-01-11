@@ -14,6 +14,11 @@ androidx-test-junit = "1.1.5"
 compose = "1.5.4"
 compose-compiler = "1.5.6"
 compose-plugin = "1.5.11"
+firebaseBom = "32.7.0"
+firebaseCommon = "1.10.4"
+firebaseCommonKtx = "20.4.2"
+firebaseFirestore = "1.8.1"
+kotlinxSerializationJson = "1.5.1"
 mediaCompose = "0.11.0"
 mpfilepicker = "3.1.0"
 permissions = "0.17.0"
@@ -24,8 +29,13 @@ junit = "4.13.2"
 kotlin = "1.9.21-1.0.15"
 kotlinOld = "1.9.21"
 core = "1.12.0"
+firebaseFirestoreKtx = "24.10.0"
 
 [libraries]
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-common = { module = "dev.gitlive:firebase-common", version.ref = "firebaseCommon" }
+firebase-common-ktx = { module = "com.google.firebase:firebase-common-ktx", version.ref = "firebaseCommonKtx" }
+firebase-firestore = { module = "dev.gitlive:firebase-firestore", version.ref = "firebaseFirestore" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -36,6 +46,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 media-compose = { module = "dev.icerock.moko:media-compose", version.ref = "mediaCompose" }
 mpfilepicker = { module = "com.darkrockstudios:mpfilepicker", version.ref = "mpfilepicker" }
 permissions = { module = "dev.icerock.moko:permissions", version.ref = "permissions" }
@@ -55,6 +66,7 @@ compose-foundation = { module = "androidx.compose.foundation:foundation", versio
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
 androidx-core = { group = "androidx.core", name = "core", version.ref = "core" }
+firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 
 [bundles]
 voyager = ["voyager-navigator", "voyager-screen-model", "voyager-tab", "voyager-transitions", "voyager-koin"]
